@@ -47,6 +47,9 @@ public class BasicSorting {
     // This could be because swapping is performed after binary search for finding the correct position for the next element.
     // In the original version, swapping was performed on the way as we were finding the right position for the next element.
     // However, this optimized version outperformed the original one when it was tested on some really large arrays.
+    // In case of arrays, the swapping operation still takes O(n) time although we've reduced comparisons to O(Log(n)).
+    // Therefore, considering only the comparisons we've an O(nLog(n)) but considering the swaps the algorithm still costs O(n^2)
+    // Since O(n) swaps could be required for inserting an element at appropriate position. But the comparisons could still be O(Log(n)).
     private static void insertionSortOptimizedWithBinarySearch(int[] arr) {
         for(int key = 1 ; key < arr.length ; key++) {
 
