@@ -3,24 +3,83 @@ import java.util.Random;
 public class HeapSort {
 
     public static void main(String args[]) {
-        final int SIZE_OF_ARRAY = 100;
-        int[] arr = new int[SIZE_OF_ARRAY];
+        final int INITIAL_SIZE_OF_HEAP = 10;
+        int[] arr = new int[INITIAL_SIZE_OF_HEAP + 3];
+        int CURRENT_SIZE_OF_HEAP = INITIAL_SIZE_OF_HEAP;
 
         Random random = new Random();
 
-        for(int index = 0 ; index < SIZE_OF_ARRAY ; index++) {
-            arr[index] = random.nextInt(SIZE_OF_ARRAY);
+        for(int index = 0 ; index < INITIAL_SIZE_OF_HEAP ; index++) {
+            arr[index] = random.nextInt(INITIAL_SIZE_OF_HEAP);
         }
 
         printArray(arr);
         long start, end;
+
+        buildMaxHeap(arr, CURRENT_SIZE_OF_HEAP);
+        System.out.println("Built heap :" + arr);
+
+        int[] arrToSort = arr.clone();
         start = System.nanoTime();
-        heapSort(arr);
+        heapSort(arrToSort);
         end = System.nanoTime();
 
-        printArray(arr);
-        
+        System.out.println("Sorted array :");
+        printArray(arrToSort);
+
         System.out.println("Time required for heap sort is " + (end - start) + " nanoseconds.");
+
+        System.out.println("Heap before performing insertions : ");
+        printArray(arr);
+
+        insertInHeap(arr, CURRENT_SIZE_OF_HEAP++, INITIAL_SIZE_OF_HEAP + 1);
+        System.out.println("Current heap :");
+        printArray(arr);
+
+        insertInHeap(arr, CURRENT_SIZE_OF_HEAP++, INITIAL_SIZE_OF_HEAP - INITIAL_SIZE_OF_HEAP);
+        System.out.println("Current heap :");
+        printArray(arr);
+
+        insertInHeap(arr, CURRENT_SIZE_OF_HEAP++, INITIAL_SIZE_OF_HEAP / 2);
+        System.out.println("Current heap :");
+        printArray(arr);
+    }
+
+    private static void insertInHeap(int[] arr, int sizeOfHeap, int newVal) {
+
+        arr[sizeOfHeap] = newVal;
+        maxHeapifyBottomUp(arr, sizeOfHeap + 1, sizeOfHeap);
+    }
+
+    private static void maxHeapifyBottomUp(int[] arr, final int HEAP_SIZE, int startIndex) {
+
+        int parentIndex = (startIndex - 1) / 2;
+
+        while(parentIndex >= 0) {
+            int parentKey = arr[parentIndex];
+            int rightChildIndex = 2 * (parentIndex + 1);
+            int leftChildIndex = rightChildIndex - 1;
+
+            int greatestChild = arr[leftChildIndex];
+            int greatestChildIndex = leftChildIndex;
+
+            if(rightChildIndex < HEAP_SIZE) {
+                int rightChild = arr[rightChildIndex];
+                if(rightChild > greatestChild) {
+                    greatestChild = rightChild;
+                    greatestChildIndex = rightChildIndex;
+                }
+            }
+
+            if(parentKey < greatestChild) {
+                arr[parentIndex] = greatestChild;
+                arr[greatestChildIndex] = parentKey;
+                parentIndex = (parentIndex - 1) / 2;
+            }
+            else {
+                break;
+            }
+        }
     }
 
     private static void printArray(int arr[]) {
@@ -32,7 +91,6 @@ public class HeapSort {
     }
 
     private static void heapSort(int[] arr) {
-        buildMaxHeap(arr);
 
         int lengthOfHeap = arr.length;
         while(lengthOfHeap > 0) {
@@ -46,11 +104,11 @@ public class HeapSort {
         }
     }
 
-    private static void buildMaxHeap(int[] arr) {
+    private static void buildMaxHeap(int[] arr, final int SIZE_OF_HEAP) {
 
-        final int lastParentIndex = (arr.length / 2) - 1;
+        final int lastParentIndex = (SIZE_OF_HEAP / 2) - 1;
         for(int index = lastParentIndex ; index > -1 ; index--) {
-            maxHeapify(arr, index, arr.length);
+            maxHeapify(arr, index, SIZE_OF_HEAP);
         }
     }
 
