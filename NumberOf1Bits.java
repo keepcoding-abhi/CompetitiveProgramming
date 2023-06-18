@@ -32,16 +32,33 @@ public class NumberOf1Bits {
 
     public int hammingWeight(int n) {
         int numberOfOnes = 0;
-        int msbMask = 1;
+        int bitMask = 1;
 
         for(int index = 0 ; index < 32 ; index++) {
-            if((n & msbMask) != 0) {
+            if((n & bitMask) != 0) {
                 numberOfOnes++;
             }
 
-            msbMask = msbMask << 1;
+            bitMask = bitMask << 1;
         }
 
         return numberOfOnes;
+    }
+
+    // Time : O(32)
+    // Space : O(1) constant
+    // Scanning each of the 32 bits
+    public int hammingWeight(int n) {
+        int ones = 0;
+
+        for(int index = 0 ; index < 32 ; index++) {
+            if((n & 1) == 1) {
+                ones++;
+            }
+
+            n >>>= 1;
+        }
+
+        return ones;
     }
 }
