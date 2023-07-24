@@ -1,5 +1,11 @@
+import java.util.Arrays;
+
 public class HouseRobber {
 
+    /*
+    Time : O(n)
+    Space : O(1)
+     */
     // Bottom-up iterative solution using constant space.
     public int rob(int[] nums) {
 
@@ -31,6 +37,10 @@ public class HouseRobber {
         return maxRobbery;
     }
 
+    /*
+    Time : O(n)
+    Space : O(n)
+     */
     // Bottom-up iterative solution using linear space.
     public int rob(int[] nums) {
 
@@ -59,33 +69,40 @@ public class HouseRobber {
         return maxRobbery;
     }
 
-    // Top down recursive solution.
+    /*
+    Time : O(n)
+    Space : O(n)
+    Top down recursive solution.
+     */
     public int rob(int[] nums) {
-        int numberOfHouses = nums.length;
-        int[] calculatedSums = new int[numberOfHouses];
-
-        for(int index = 0 ; index < numberOfHouses ; index++) {
-            calculatedSums[index] = -1;
-        }
-
-        return maxRobbery(0, nums, 0, calculatedSums);
+        int[] savedResults = new int[nums.length];
+        Arrays.fill(savedResults, -1);
+        return maximizeRobbery(nums, 0, savedResults);
     }
 
-    private int maxRobbery(int currentHouse, int[] cashInHouses, int currentSum, int[] calculatedSums) {
-        int maxSum = currentSum;
+    private int maximizeRobbery(int[] nums, int index, int[] savedResults) {
 
-        if(currentHouse < cashInHouses.length) {
+        int maxMoneyRobbed = 0;
+        if(index < nums.length) {
 
-            if(calculatedSums[currentHouse] < 0) {
-                calculatedSums[currentHouse] = Math.max(maxRobbery(currentHouse + 1, cashInHouses, currentSum, calculatedSums), cashInHouses[currentHouse] + maxRobbery(currentHouse + 2, cashInHouses, currentSum, calculatedSums));
+            maxMoneyRobbed = savedResults[index];
+            if(maxMoneyRobbed == -1) {
+                int currentHouseRobbed = nums[index] + maximizeRobbery(nums, index + 2, savedResults);
+                int currentHouseNotRobbed = maximizeRobbery(nums, index + 1, savedResults);
+                maxMoneyRobbed = Math.max(currentHouseRobbed, currentHouseNotRobbed);
+
+                savedResults[index] = maxMoneyRobbed;
             }
-
-            maxSum = calculatedSums[currentHouse];
         }
 
-        return maxSum;
+        return maxMoneyRobbed;
     }
 
+    /*
+    Time : O(2^n)
+    Space : O(n)
+    Find the amount that can be robbed when current house is robbed and when it isn't select the maximum between them.
+     */
     //Brute force solution. Exceeds time limit.
     public int rob(int[] nums) {
         return maxRobbery(0, nums, 0);
