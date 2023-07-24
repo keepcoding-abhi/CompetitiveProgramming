@@ -4,8 +4,8 @@ public class ReverseToMakeEqual {
     Problem statement :
     Given two arrays A and B of length N, determine if there is a way to make A equal to B by reversing any subarrays from array B any number of times.
 
-    Time : O(n)
-    Space : O(1)
+    Time : O(n).
+    Space : O(1).
     If there exists a sub-array which when reversed equals the two arrays then the remaining portion of those two arrays are same.
     Find the sub-array which is not equal and see if the reverse of that subarray makes the two arrays equal.
      */
