@@ -1,5 +1,30 @@
+import java.util.Arrays;
+
 public class UniquePaths {
 
+    /*
+    Time : O(m*n)
+    Space : O(n)
+    We're only interested in the count values from next row.
+    Reuse the memory which was used in the previous iteration.
+     */
+    public int uniquePaths(int m, int n) {
+        int[] counts =  new int[n];
+        Arrays.fill(counts, 1);
+
+        for(int rowIndex = m - 2 ; rowIndex > -1 ; rowIndex--) {
+            for(int colIndex = n - 2 ; colIndex > -1 ; colIndex--) {
+                counts[colIndex] = counts[colIndex] + counts[colIndex + 1];
+            }
+        }
+
+        return counts[0];
+    }
+
+    /*
+    Time : O(m*n)
+    Space : O(m*n)
+     */
     //1) DP-based solution. Each cell in the pathsMatrix contains the number of ways to reach that cell from (0, 0).
     //  Initializing all the cells which can only be reached from one-way first.
     public int uniquePaths(int m, int n) {
@@ -24,6 +49,10 @@ public class UniquePaths {
     }
 
     //2) Using matrix to store intermediate results.
+    /*
+    Time : O(m*n)
+    Space : O(m*n)
+     */
     public int uniquePaths(int m, int n) {
 
         int[][] pathsMatrix = new int[m][n];
@@ -54,6 +83,10 @@ public class UniquePaths {
         return result;
     }
 
+    /*
+    Time : O(2^(m * n))
+    Space : O(m + n)
+     */
     //3) Brute Force solution. Exceeds time limit.
     public int uniquePaths(int m, int n) {
 
