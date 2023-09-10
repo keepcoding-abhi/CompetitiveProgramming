@@ -1,6 +1,41 @@
 public class LongestCommonSubsequence {
 
     /*
+    Time : O(m*n)
+    Space : O(min(m, n))
+
+    Reducing an array from the next approach.
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        int t1Len = text1.length(), t2Len = text2.length();
+
+        int[] savedRes = new int[t2Len + 1];
+        int maxLen = 0;
+
+        for(int t1Index = t1Len - 1 ; t1Index > -1 ; t1Index--) {
+            char t1Char = text1.charAt(t1Index);
+            int prevVal = 0;
+            for(int t2Index = t2Len - 1 ; t2Index > -1 ; t2Index--) {
+                char t2Char = text2.charAt(t2Index);
+
+                int longestLen = 0;
+                if(t1Char == t2Char) {
+                    longestLen = 1 + prevVal;
+                }
+                else {
+                    longestLen = Math.max(savedRes[t2Index + 1], savedRes[t2Index]);
+                }
+
+                prevVal = savedRes[t2Index];
+
+                savedRes[t2Index] = longestLen;
+            }
+        }
+
+        return savedRes[0];
+    }
+
+    /*
     Reducing the space requirements from previous approach.
     Time : O(m * n)
     Space : O(min(m, n))
