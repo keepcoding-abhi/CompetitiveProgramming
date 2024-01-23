@@ -1,7 +1,76 @@
+import java.util.LinkedList;
+import java.util.List;
+
 public class LetterCombinationsOfAPhoneNumber {
 }
 
 class Solution {
+
+    /*
+    Time: O(n* (4^(n)))
+    Space: O(n)
+
+    4^(n) combinations possible, O(n) time required to create strings
+    Backtracking solution, substituting each possible character.
+     */
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new LinkedList<String>();
+
+        if(digits.length() > 0) {
+            generateCombinations(digits, new char[digits.length()], 0, result);
+        }
+
+        return result;
+    }
+
+    private void generateCombinations(String digits, char[] currentWord, int index, List<String> words) {
+        if(index == currentWord.length) {
+            words.add(new String(currentWord));
+        }
+        else {
+            int currentNum = digits.charAt(index) - '0';
+            char[] charsFromCurrentNum = getCharsFromNum(currentNum);
+
+            for(char currentChar : charsFromCurrentNum) {
+                currentWord[index] = currentChar;
+                generateCombinations(digits, currentWord, index + 1, words);
+            }
+        }
+    }
+
+    private char[] getCharsFromNum(int num) {
+        char[] result = null;
+
+        switch(num) {
+            case 2:
+                result = new char[]{'a', 'b', 'c'};
+                break;
+            case 3:
+                result = new char[]{'d', 'e', 'f'};
+                break;
+            case 4:
+                result = new char[]{'g', 'h', 'i'};
+                break;
+            case 5:
+                result = new char[]{'j', 'k', 'l'};
+                break;
+            case 6:
+                result = new char[]{'m', 'n', 'o'};
+                break;
+            case 7:
+                result = new char[]{'p', 'q', 'r', 's'};
+                break;
+            case 8:
+                result = new char[]{'t', 'u', 'v'};
+                break;
+            case 9:
+                result = new char[]{'w', 'x', 'y', 'z'};
+                break;
+        }
+
+        return result;
+    }
+
     public List<String> letterCombinations(String digits) {
 
         int numberOfDigits = digits.length();
