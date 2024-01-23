@@ -1,69 +1,44 @@
-class Solution {
-    public void nextPermutation(int[] nums) {
-        int totalElements = nums.length;
-        int inputPermutationSorted[] = new int[totalElements];
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-        for(int index = 0 ; index < totalElements ; index++) {
-            inputPermutationSorted[index] = nums[index];
-        }
+public class Permutations {
+    /*
+    Time: O(n!)
+    Space: O(n), depth of recursion stack
 
-        Arrays.sort(inputPermutationSorted);
+    Generate all possible combinations by swapping.
+     */
+    public List<List<Integer>> permute(int[] nums) {
 
-        List<int[]> sortedPermutations = new ArrayList<int[]>();
-        generatePermutations(inputPermutationSorted, 0, sortedPermutations);
+        List<List<Integer>> result = new LinkedList<List<Integer>>();
 
-        int indexOfCurrentPermutation = searchPermutation(inputPermutationSorted, sortedPermutations);
+        generatePermutations(nums, 0, result);
 
-        int[] result;
-        if(indexOfCurrentPermutation == sortedPermutations.size() - 1) {
-            result = sortedPermutations.get(0);
-        }
-        else {
-            result = sortedPermutations.get(indexOfCurrentPermutation + 1);
-        }
-
-        for(int index = 0 ; index < totalElements ; index++) {
-            nums[index] = result[index];
-        }
+        return result;
     }
 
-    public int searchPermutation(int[] inputPermutation, List<int[]> sortedPermutations) {
+    private void generatePermutations(int[] nums, int startIndex, List<List<Integer>> perms) {
 
-        int sortedPermIndex = 0;
-        for(int index = 0, totalElements = inputPermutation.length ; index < totalElements ; index++) {
-            int currentElement = inputPermutation[index];
+        if(startIndex == nums.length) {
+            List<Integer> nextPerm = new ArrayList<Integer>(nums.length);
 
-            while(sortedPermIndex < sortedPermutations.size()) {
-                int[] currentPerm = sortedPermutations.get(sortedPermIndex);
-
-                if(currentPerm[index] == currentElement) {
-                    break;
-                }
-
-                sortedPermIndex++;
+            for(int num : nums) {
+                nextPerm.add(num);
             }
-        }
 
-        return sortedPermIndex;
-    }
-
-    public void generatePermutations(int[] nums, int beginIndex, List<int[]> sortedPermutations) {
-
-        int totalElements = nums.length;
-        if(beginIndex == totalElements - 1) {
-            int currentPerm[] = nums.clone();
-            sortedPermutations.add(currentPerm);
+            perms.add(nextPerm);
         }
         else {
-            for(int index = beginIndex ; index < totalElements ; index++) {
-                swap(nums, beginIndex, index);
-                generatePermutations(nums, beginIndex + 1, sortedPermutations);
-                swap(nums, beginIndex, index);
+            for(int swapWith = startIndex ; swapWith < nums.length ; swapWith++) {
+                swap(nums, startIndex, swapWith);
+                generatePermutations(nums, startIndex + 1, perms);
+                swap(nums, startIndex, swapWith);
             }
         }
     }
 
-    public void swap(int[] nums, int index1, int index2) {
+    private void swap(int[] nums, int index1, int index2) {
         int temp = nums[index1];
         nums[index1] = nums[index2];
         nums[index2] = temp;
