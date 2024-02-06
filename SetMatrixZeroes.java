@@ -1,4 +1,54 @@
+import java.util.Arrays;
+
 public class SetMatrixZeroes {
+
+    /*
+    Time: O(mn)
+    Space: O(1)
+
+    Reduced the number of boolean variables from 2 to 1
+    Flag is used to record whether the first row is zero. Matrix[0][0] will be zero only when the first
+    column is zero.
+     */
+    public void setZeroes(int[][] matrix) {
+
+        int nRows = matrix.length, nCols = matrix[0].length;
+        boolean firstRowZero = false;
+
+        for(int rowIndex = 0 ; rowIndex < nRows ; rowIndex++) {
+            for(int colIndex = 0 ; colIndex < nCols ; colIndex++) {
+                if(matrix[rowIndex][colIndex] == 0) {
+                    matrix[0][colIndex] = 0;
+
+                    if(rowIndex == 0) {
+                        firstRowZero = true;
+                    }
+                    else {
+                        matrix[rowIndex][0] = 0;
+                    }
+                }
+            }
+        }
+
+        for(int rowIndex = 1 ; rowIndex < nRows ; rowIndex++) {
+            for(int colIndex = 1 ; colIndex < nCols ; colIndex++) {
+                if(matrix[0][colIndex] == 0 || matrix[rowIndex][0] == 0) {
+                    matrix[rowIndex][colIndex] = 0;
+                }
+            }
+        }
+
+        if(matrix[0][0] == 0) {
+            for(int rowIndex = 1 ; rowIndex < nRows ; rowIndex++) {
+                matrix[rowIndex][0] = 0;
+            }
+        }
+
+        if(firstRowZero) {
+            Arrays.fill(matrix[0], 0);
+        }
+
+    }
 
     // 1) Using first row and first column to store whether the remaining row/col must be marked as zero.
     //    Time complexity : O(mn) Space complexity = O(1)
