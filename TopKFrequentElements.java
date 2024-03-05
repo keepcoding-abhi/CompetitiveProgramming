@@ -4,6 +4,83 @@ public class TopKFrequentElements {
 }
 
 /*
+    Time: O(n)
+    Space: O(2*(10^4))
+
+    Record the frequency of each number. Then create a map with key as the frequency and the value as list of all elements
+    with that frequency. Store the k most frequently occurring elements in the results.
+ */
+class Solution {
+
+    public int[] topKFrequent(int[] nums, int k) {
+
+        int minVal = nums[0], maxVal = nums[0];
+
+        for(int num : nums) {
+            if(num < minVal) {
+                minVal = num;
+            }
+            else if(num > maxVal) {
+                maxVal = num;
+            }
+        }
+
+        int[] freqs = new int[maxVal - minVal + 1];
+        int maxFreq = 0;
+
+        for(int num : nums) {
+            int numFreq = ++freqs[num - minVal];
+
+            if(numFreq > maxFreq) {
+                maxFreq = numFreq;
+            }
+        }
+
+        List<Integer>[] elementsAtEachFrequency = new List[maxFreq + 1];
+
+        int numIndex = 0;
+
+        for(int freq : freqs) {
+
+            if(freq != 0) {
+                int currentNum = numIndex + minVal;
+
+                List<Integer> elements = elementsAtEachFrequency[freq];
+
+                if(elements == null) {
+                    elements = new LinkedList<Integer>();
+                    elementsAtEachFrequency[freq] = elements;
+                }
+
+                elements.add(currentNum);
+            }
+
+            numIndex++;
+        }
+
+        int[] results = new int[k];
+
+        int resultIndex = 0;
+
+        for(int currentFreq = maxFreq ; currentFreq > -1 && resultIndex < k ; currentFreq--) {
+            List<Integer> elementsAtCurrentFreq = elementsAtEachFrequency[currentFreq];
+
+            if(elementsAtCurrentFreq != null) {
+                for(int currentEl : elementsAtCurrentFreq) {
+                    results[resultIndex++] = currentEl;
+
+                    if(resultIndex == k) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return results;
+    }
+}
+
+/*
 Time : O(n) best case O(n^2) average case
 Space : O(n)
 
