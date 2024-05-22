@@ -32,3 +32,39 @@ class Solution {
         return result;
     }
 }
+
+/*
+Time: O(n)
+Space: O(1)
+
+Traverse the array of temperatures in reverse order. Check if the temperature on next day is more, if not,
+check if we have found some answer to next day.
+ */
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int nDays = temperatures.length;
+
+        int[] results = new int[nDays];
+
+        for(int index = nDays - 2 ; index > -1 ; index--) {
+            int currentTemp = temperatures[index];
+
+            int futureDayIndex = index + 1;
+
+            while(temperatures[futureDayIndex] <= currentTemp) {
+                if(results[futureDayIndex] == 0) {
+                    break;
+                }
+                else {
+                    futureDayIndex += results[futureDayIndex];
+                }
+            }
+
+            if(futureDayIndex != 0 && temperatures[futureDayIndex] > currentTemp) {
+                results[index] = futureDayIndex - index;
+            }
+        }
+
+        return results;
+    }
+}
