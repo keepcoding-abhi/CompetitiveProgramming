@@ -1,5 +1,194 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class LRUCache {
 }
+
+/*
+Time: O(1)
+Space: O(n) for the hashmap and doubly linked list
+
+Utilize a doubly linked list for storing the elements in cache. And use a hashmap to access the elements of linked list
+in constant time.
+ */
+class ListNode {
+    int key, val;
+    ListNode prev, next;
+}
+
+class DoublyLinkedList {
+    ListNode head, tail;
+
+    DoublyLinkedList() {
+        head = null;
+        tail = null;
+    }
+
+    public ListNode insertNode(int key, int val) {
+        ListNode newNode = new ListNode();
+        newNode.key = key;
+        newNode.val = val;
+
+        if(tail == null) {
+            head = newNode;
+            tail = newNode;
+        }
+        else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+
+        return newNode;
+    }
+
+    public void insertNode(ListNode node) {
+        if(head == null) {
+            head = node;
+            tail = node;
+        }
+        else {
+            tail.next = node;
+            node.prev = tail;
+            tail = tail.next;
+        }
+    }
+
+    public int removeFirst() {
+        int key = -1;
+
+        if(head != null) {
+            key = head.key;
+            head = head.next;
+
+            if(head == null) {
+                tail = null;
+            }
+            else {
+                head.prev.next = null;
+                head.prev = null;
+            }
+        }
+
+        return key;
+    }
+
+    public int removeLast() {
+        int key = -1;
+
+        if(tail != null) {
+            key = tail.val;
+            tail = tail.prev;
+
+            if(tail == null) {
+                head = null;
+            }
+            else {
+                tail.next.prev = null;
+                tail.next = null;
+            }
+        }
+
+        return key;
+    }
+
+    public void removeNode(ListNode node) {
+        if(node == head) {
+            removeFirst();
+        }
+        else if(node == tail) {
+            removeLast();
+        }
+        else {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            node.next = null;
+            node.prev = null;
+        }
+    }
+}
+
+class LRUCache {
+
+    Map<Integer, ListNode> cacheAccess;
+    DoublyLinkedList cache;
+    int size, capacity;
+
+    public LRUCache(int capacity) {
+        cache = new DoublyLinkedList();
+        cacheAccess = new HashMap<Integer, ListNode>(capacity);
+        this.capacity = capacity;
+        size = 0;
+    }
+
+    public int get(int key) {
+
+        int value = -1;
+        ListNode currKeyEntry;
+
+        if(cacheAccess.containsKey(key)) {
+            currKeyEntry = cacheAccess.get(key);
+            value = currKeyEntry.val;
+
+            cache.removeNode(currKeyEntry);
+            cache.insertNode(currKeyEntry);
+        }
+
+        return value;
+    }
+
+    public void put(int key, int value) {
+
+        if(cacheAccess.containsKey(key)) {
+            ListNode currNode = cacheAccess.get(key);
+            cache.removeNode(currNode);
+            currNode.val = value;
+            cache.insertNode(currNode);
+        }
+        else {
+            ListNode currNode = cache.insertNode(key, value);
+            cacheAccess.put(key, currNode);
+            size++;
+        }
+
+        if(size > capacity) {
+            int removedKey = cache.removeFirst();
+            cacheAccess.remove(removedKey);
+            size--;
+        }
+    }
+}
+
+/*
+
+Time: O(1)
+Space: O(capacity) pseudo polynomial
+Utilizing the linked hash map data structure for achieving the solution above.
+ */
+class LRUCache {
+
+    Map<Integer, Integer> cache;
+    int capacity;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        cache = new LinkedHashMap<Integer, Integer>(capacity, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, Integer> entry) {
+                return size() > capacity;
+            }
+        };
+    }
+
+    public int get(int key) {
+        return cache.getOrDefault(key, -1);
+    }
+
+    public void put(int key, int value) {
+        cache.put(key, value);
+    }
+}
+
 
 //1) Use hashmap for retrieving value and doubly linked list to maintain the sequence of elements in cache.
 //  Cleaner code with operations separated in different classes.
