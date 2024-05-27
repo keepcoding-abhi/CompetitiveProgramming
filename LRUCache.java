@@ -6,7 +6,7 @@ public class LRUCache {
 
 /*
 Time: O(1)
-Space: O(n) for the hashmap and doubly linked list
+Space: O(capacity) for the hashmap and doubly linked list
 
 Utilize a doubly linked list for storing the elements in cache. And use a hashmap to access the elements of linked list
 in constant time.
