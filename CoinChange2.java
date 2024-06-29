@@ -2,6 +2,29 @@ public class CoinChange2 {
 }
 
 /*
+Time: O(nCoins * amount)
+Space: O(amount)
+
+Consider each coin one by one and figure out the sums that can be made possible by building on top of the
+sums that were already formed by the previous coins. Start by assuming there is one way to generate the sum of 0.
+ */
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] waysToMakeAmount = new int[amount + 1];
+        waysToMakeAmount[0] = 1;
+
+        for(int coin : coins) {
+            int lastValidAmount = amount - coin;
+            for(int currAmount = 0 ; currAmount <= lastValidAmount ; currAmount++) {
+                waysToMakeAmount[currAmount + coin] += waysToMakeAmount[currAmount];
+            }
+        }
+
+        return waysToMakeAmount[amount];
+    }
+}
+
+/*
 Time : O(n*amount)
 Space : O(amount)
 
