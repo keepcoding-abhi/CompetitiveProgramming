@@ -16,7 +16,7 @@ a[0] a[1] a[2] ........ a[n-2] a[n-1]
 Normal distribution will be
 a[0] a[2] ... a[n - 3] a[n - 1] a[n-2] .... a[3] a[1]
  */
-class Main {
+class Main1 {
 
     // Add any helper functions you may need here
 
