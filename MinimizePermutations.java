@@ -4,16 +4,13 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class MinimizePermutations {
-}
+    /*
+    Time: O(n*n!)
+    Space: O(n!)
 
-/*
-Time: O(n*n!)
-Space: O(n!)
-
-Perform a BFS starting from the given array. Generate all of the O(n^2) possible neighbors of the current element.
-Stop when you reach the sorted permutation.
- */
-class Solution {
+    Perform a BFS starting from the given array. Generate all of the O(n^2) possible neighbors of the current element.
+    Stop when you reach the sorted permutation.
+     */
     int minOperations(int[] arr) {
         // Write your code here
         Deque<Integer> permsToVisit = new LinkedList<Integer>();
